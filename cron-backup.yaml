@@ -1,0 +1,30 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: production-cron-k8s-backup
+  namespace: cronjobs # namespace cronjobs or other namespace
+spec:
+  schedule: "0 1 * * *"  # every day at 1 am
+  failedJobsHistoryLimit: 2
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          #nodeSelector:
+          #  cloud.google.com/gke-nodepool: pool-production
+          containers:
+          - name: production-cron-k8s-backup
+            image: asia.gcr.io/zeus-14235464232132/production-k8s-backup:v1
+            args:
+            - /bin/bash 
+            - k8s-backup.sh 
+            - production
+            resources:
+             requests:
+               cpu: "100m"
+               memory: "100Mi"
+             limits:
+               cpu: "800m"
+               memory: "8000Mi"
+          restartPolicy: OnFailure
