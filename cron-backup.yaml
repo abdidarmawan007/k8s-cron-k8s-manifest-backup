@@ -26,5 +26,5 @@ spec:
                memory: "100Mi"
              limits:
                cpu: "800m"
-               memory: "8000Mi"
+               memory: "800Mi"
           restartPolicy: OnFailure
